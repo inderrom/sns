@@ -17,7 +17,7 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error"),
     ALREADY_LIKED_POST(HttpStatus.CONFLICT, "user already like the post"),
     DATABASE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Database error occurs"),
-    NOTIFICATION_CONNECT_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Connect to notification occurs error"),
+    ALRARM_CONNECT_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Connect to alarm occurs error"),
     ;
 
     private HttpStatus status;

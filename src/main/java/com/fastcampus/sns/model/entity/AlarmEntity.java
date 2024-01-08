@@ -31,7 +31,9 @@ public class AlarmEntity {
     private Integer id;
 
     // 알람을 받은 사람
-    @ManyToOne
+    // manyToOne의 default는 Eager인데,기본으로 설정할 경우 데이터를 즉시 가져오기 때문에 유저를 사용하든, 사용하지 않든 가져와진다. 그래서 LAZY를 사용해야함
+    // LAZY는 데이터가 필요하게 됐을 때 select가 일어나는 형태임
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;
 

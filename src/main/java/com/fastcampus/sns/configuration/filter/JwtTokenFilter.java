@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -26,30 +25,32 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     private final String key;
     private final UserService userService;
+    private final static List<String> TOKEN_IN_PARAM_URLS = List.of("/api/vi/users/alarm/subscribe");
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // get header
         final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (header == null || !header.startsWith("Bearer ")) {
-            log.error("Error occurs while getting header. header is null or invalid");
-            filterChain.doFilter(request, response);
-            return;
-        }
-
+        final String token;
         try {
-            final String token = header.split(" ")[1].trim();
-
+            if (TOKEN_IN_PARAM_URLS.contains(request.getRequestURI())) {
+                log.info("Request with {} check the query param", request.getRequestURI());
+                token = request.getQueryString().split("=")[1].trim();
+            } else if (header == null || !header.startsWith("Bearer ")) {
+                log.error("Authorization Header does not start with Bearer {}", request.getRequestURI());
+                filterChain.doFilter(request, response);
+                return;
+            } else {
+                token = header.split(" ")[1].trim();
+            }
             // check token is valid
             if (JwtTokenUtils.isExpired(token, key)) {
                 log.error("key is expired");
                 filterChain.doFilter(request, response);
                 return;
             }
-
             // get username from token
             String userName = JwtTokenUtils.getUserName(token, key);
-
             // check the userName is valid
             User user = userService.loadUserByUserName(userName);
 
@@ -63,7 +64,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-
         filterChain.doFilter(request, response);
     }
 }

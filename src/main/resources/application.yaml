@@ -1,8 +1,8 @@
 spring.datasource:
   hikari.maximum-pool-size: 4
-  url: jdbc:postgresql://ec2-44-206-204-65.compute-1.amazonaws.com/d16spfa6r029us
-  username: jykwjkhfubllqn
-  password: b3e726ffb36e54b7f0c7f5c8060b6b81237f23a4a6861c6708e14334fb00f312
+  url: jdbc:postgresql://ec2-44-211-104-233.compute-1.amazonaws.com/dcru8nb3tv0f4d
+  username: yynpgqdzuqepih
+  password: 67f299f099ef81fda4c045bb4eb00b3863f29708265e9cf06a1dea2dcf66b1e5
   driver-class-name: org.postgresql.Driver
 
 spring.jpa:
@@ -21,3 +21,5 @@ spring:
   sql:
     init:
       platform: postgres
+  redis:
+    url: redis://:pc80cf44dbd0d645a6f6ff45e45a8186441599f1480902e471d2e9ac52dc2931d@ec2-52-204-254-34.compute-1.amazonaws.com:9319
